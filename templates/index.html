@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yakuza Barber</title>
+</head>
+<body style="background:black;color:white;text-align:center;font-family:Arial;">
+
+<h1 style="color:red;">YAKUZA BARBER</h1>
+
+<form method="POST" action="/agendar">
+    <input name="cliente" placeholder="Cliente" required>
+    <input type="time" name="hora" required>
+
+    <select name="barbero">
+    {% for b in barberos %}
+        <option value="{{ b[0] }}">{{ b[1] }}</option>
+    {% endfor %}
+    </select>
+
+    <button>Agendar</button>
+</form>
+
+<h2>Citas</h2>
+<table border="1" style="margin:auto;">
+<tr><th>ID</th><th>Cliente</th><th>Hora</th><th>Barbero</th><th></th></tr>
+
+{% for c in citas %}
+<tr>
+<td>{{ c[0] }}</td>
+<td>{{ c[1] }}</td>
+<td>{{ c[2] }}</td>
+<td>{{ c[3] }}</td>
+<td><a href="/eliminar/{{ c[0] }}">Eliminar</a></td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
