@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Reserva confirmada | Yakuza Barber</title>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .confirmacion {
+        max-width: 650px;
+        margin: auto;
+    }
+
+    .card {
+        border: none;
+        border-radius: 18px;
+    }
+
+    .icono {
+        font-size: 60px;
+    }
+
+    .titulo {
+        font-weight: bold;
+    }
+
+    .dato {
+        border-bottom: 1px solid #e9e9e9;
+        padding: 14px 0;
+    }
+
+    .dato:last-child {
+        border-bottom: none;
+    }
+
+    .estado {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 20px;
+        background-color: #fff3cd;
+        color: #664d03;
+        font-weight: 600;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+```
+<div class="container">
+
+    <a
+        class="navbar-brand"
+        href="/"
+    >
+        YAKUZA BARBER
+    </a>
+
+</div>
+```
+
+</nav>
+
+<!-- ==========================================
+     CONTENIDO
+========================================== -->
+
+<main class="container py-5">
+
+```
+<div class="confirmacion">
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-body p-4 p-md-5">
+
+
+            <!-- ==================================
+                 MENSAJE
+            =================================== -->
+
+            <div class="text-center mb-4">
+
+                <div class="icono">
+                    ✓
+                </div>
+
+                <h1 class="titulo">
+                    ¡Reserva realizada!
+                </h1>
+
+                <p class="text-muted">
+                    Tu solicitud de reserva fue registrada correctamente.
+                </p>
+
+            </div>
+
+
+            <!-- ==================================
+                 INFORMACIÓN
+            =================================== -->
+
+            <div class="mb-4">
+
+
+                <div class="dato">
+
+                    <strong>
+                        Cliente
+                    </strong>
+
+                    <div>
+                        {{ reserva.cliente.nombre }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Barbero
+                    </strong>
+
+                    <div>
+                        {{ reserva.barbero.nombre }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Servicio
+                    </strong>
+
+                    <div>
+                        {{ reserva.servicio.nombre }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Precio
+                    </strong>
+
+                    <div>
+                        ${{ "{:,}".format(
+                            reserva.servicio.precio
+                        ).replace(",", ".") }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Duración
+                    </strong>
+
+                    <div>
+                        {{ reserva.servicio.duracion }} minutos
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Fecha
+                    </strong>
+
+                    <div>
+                        {{ reserva.fecha.strftime("%d/%m/%Y") }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Hora
+                    </strong>
+
+                    <div>
+                        {{ reserva.hora.strftime("%H:%M") }}
+                    </div>
+
+                </div>
+
+
+                <div class="dato">
+
+                    <strong>
+                        Estado
+                    </strong>
+
+                    <div class="mt-2">
+
+                        <span class="estado">
+
+                            {{ reserva.estado|capitalize }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==================================
+                 AVISO
+            =================================== -->
+
+            <div class="alert alert-info">
+
+                <strong>
+                    Importante:
+                </strong>
+
+                Tu reserva quedó en estado
+                <strong>pendiente</strong>.
+
+                El administrador podrá confirmarla posteriormente.
+
+            </div>
+
+
+            <!-- ==================================
+                 BOTONES
+            =================================== -->
+
+            <div class="d-grid gap-2 mt-4">
+
+                <a
+                    href="/"
+                    class="btn btn-dark btn-lg"
+                >
+                    Volver al inicio
+                </a>
+
+                <a
+                    href="/barberos"
+                    class="btn btn-outline-dark"
+                >
+                    Reservar otra hora
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+```
+
+</main>
+
+</body>
+
+</html>

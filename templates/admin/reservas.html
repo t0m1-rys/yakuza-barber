@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Reservas | Yakuza Barber</title>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .contenedor {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .tabla-container {
+        overflow-x: auto;
+    }
+
+    .tabla-reservas {
+        vertical-align: middle;
+    }
+
+    .tabla-reservas th {
+        white-space: nowrap;
+    }
+
+    .tabla-reservas td {
+        white-space: nowrap;
+    }
+
+    .estado {
+        font-size: 0.85rem;
+        padding: 7px 10px;
+        border-radius: 20px;
+    }
+
+    .acciones {
+        min-width: 280px;
+    }
+
+    .fecha {
+        font-weight: 600;
+    }
+
+    .hora {
+        font-weight: bold;
+        font-size: 1.05rem;
+    }
+
+    .sin-reservas {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .cliente-nombre {
+        font-weight: 600;
+    }
+
+    .servicio-nombre {
+        font-weight: 500;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+```
+<div class="container-fluid">
+
+    <a
+        class="navbar-brand"
+        href="/admin"
+    >
+        YAKUZA BARBER | ADMIN
+    </a>
+
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="/"
+            class="btn btn-outline-light btn-sm"
+        >
+            Ver sitio
+        </a>
+
+        <a
+            href="/logout"
+            class="btn btn-outline-danger btn-sm"
+        >
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</div>
+```
+
+</nav>
+
+<!-- ==========================================
+     CONTENIDO
+========================================== -->
+
+<main class="container-fluid py-4">
+
+```
+<div class="contenedor">
+
+
+    <!-- ==================================
+         ENCABEZADO
+    =================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+
+        <div>
+
+            <h1 class="mb-1">
+                Reservas
+            </h1>
+
+            <p class="text-muted mb-0">
+                Gestiona las reservas de Yakuza Barber.
+            </p>
+
+        </div>
+
+
+        <a
+            href="/admin"
+            class="btn btn-dark"
+        >
+            ← Panel principal
+        </a>
+
+    </div>
+
+
+
+    <!-- ==================================
+         MENSAJES
+    =================================== -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            {% for categoria, mensaje in messages %}
+
+                <div
+                    class="alert alert-{{ categoria }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ mensaje }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- ==================================
+         TABLA
+    =================================== -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body p-0">
+
+            {% if reservas %}
+
+
+            <div class="tabla-container">
+
+                <table class="table table-hover mb-0 tabla-reservas">
+
+
+                    <!-- ==================================
+                         ENCABEZADO TABLA
+                    =================================== -->
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th class="px-3">
+                                #
+                            </th>
+
+                            <th>
+                                Fecha
+                            </th>
+
+                            <th>
+                                Hora
+                            </th>
+
+                            <th>
+                                Cliente
+                            </th>
+
+                            <th>
+                                Teléfono
+                            </th>
+
+                            <th>
+                                Barbero
+                            </th>
+
+                            <th>
+                                Servicio
+                            </th>
+
+                            <th>
+                                Precio
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- ==================================
+                         RESERVAS
+                    =================================== -->
+
+                    <tbody>
+
+
+                        {% for reserva in reservas %}
+
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td class="px-3">
+
+                                <strong>
+                                    #{{ reserva.id }}
+                                </strong>
+
+                            </td>
+
+
+
+                            <!-- FECHA -->
+
+                            <td class="fecha">
+
+                                {{ reserva.fecha.strftime(
+                                    "%d/%m/%Y"
+                                ) }}
+
+                            </td>
+
+
+
+                            <!-- HORA -->
+
+                            <td class="hora">
+
+                                {{ reserva.hora.strftime(
+                                    "%H:%M"
+                                ) }}
+
+                            </td>
+
+
+
+                            <!-- CLIENTE -->
+
+                            <td class="cliente-nombre">
+
+                                {{ reserva.cliente.nombre }}
+
+                            </td>
+
+
+
+                            <!-- TELEFONO -->
+
+                            <td>
+
+                                {{ reserva.cliente.telefono }}
+
+                            </td>
+
+
+
+                            <!-- BARBERO -->
+
+                            <td>
+
+                                {{ reserva.barbero.nombre }}
+
+                            </td>
+
+
+
+                            <!-- SERVICIO -->
+
+                            <td class="servicio-nombre">
+
+                                {{ reserva.servicio.nombre }}
+
+                            </td>
+
+
+
+                            <!-- PRECIO -->
+
+                            <td>
+
+                                ${{ "{:,}".format(
+                                    reserva.servicio.precio
+                                ).replace(",", ".") }}
+
+                            </td>
+
+
+
+                            <!-- ESTADO -->
+
+                            <td>
+
+
+                                {% if reserva.estado == "pendiente" %}
+
+                                    <span
+                                        class="badge bg-warning text-dark estado"
+                                    >
+                                        Pendiente
+                                    </span>
+
+
+                                {% elif reserva.estado == "confirmada" %}
+
+                                    <span
+                                        class="badge bg-success estado"
+                                    >
+                                        Confirmada
+                                    </span>
+
+
+                                {% elif reserva.estado == "completada" %}
+
+                                    <span
+                                        class="badge bg-primary estado"
+                                    >
+                                        Completada
+                                    </span>
+
+
+                                {% elif reserva.estado == "cancelada" %}
+
+                                    <span
+                                        class="badge bg-danger estado"
+                                    >
+                                        Cancelada
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span
+                                        class="badge bg-secondary estado"
+                                    >
+                                        {{ reserva.estado }}
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- ==================================
+                                 ACCIONES
+                            =================================== -->
+
+                            <td class="acciones">
+
+
+                                <div class="d-flex flex-wrap gap-1">
+
+
+                                    <!-- VER DETALLE -->
+
+                                    <a
+                                        href="/admin/reserva/{{ reserva.id }}"
+                                        class="btn btn-dark btn-sm"
+                                    >
+                                        👁 Ver
+                                    </a>
+
+
+
+                                    <!-- ==================================
+                                         PENDIENTE
+                                    =================================== -->
+
+                                    {% if reserva.estado == "pendiente" %}
+
+                                        <a
+                                            href="/admin/reserva/{{ reserva.id }}/estado/confirmada"
+                                            class="btn btn-success btn-sm"
+                                        >
+                                            ✓ Confirmar
+                                        </a>
+
+
+                                        <a
+                                            href="/admin/reserva/{{ reserva.id }}/estado/cancelada"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');"
+                                        >
+                                            ✕ Cancelar
+                                        </a>
+
+                                    {% endif %}
+
+
+
+                                    <!-- ==================================
+                                         CONFIRMADA
+                                    =================================== -->
+
+                                    {% if reserva.estado == "confirmada" %}
+
+                                        <a
+                                            href="/admin/reserva/{{ reserva.id }}/estado/completada"
+                                            class="btn btn-primary btn-sm"
+                                        >
+                                            ✓ Completar
+                                        </a>
+
+
+                                        <a
+                                            href="/admin/reserva/{{ reserva.id }}/estado/cancelada"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');"
+                                        >
+                                            ✕ Cancelar
+                                        </a>
+
+                                    {% endif %}
+
+
+
+                                    <!-- ==================================
+                                         COMPLETADA
+                                    =================================== -->
+
+                                    {% if reserva.estado == "completada" %}
+
+                                        <span class="text-success small">
+
+                                            ✓ Servicio realizado
+
+                                        </span>
+
+                                    {% endif %}
+
+
+
+                                    <!-- ==================================
+                                         CANCELADA
+                                    =================================== -->
+
+                                    {% if reserva.estado == "cancelada" %}
+
+                                        <span class="text-danger small">
+
+                                            ✕ Reserva cancelada
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- ==================================
+                 SIN RESERVAS
+            =================================== -->
+
+            <div class="sin-reservas">
+
+                <div class="display-4 mb-3">
+                    📅
+                </div>
+
+                <h3>
+                    No hay reservas
+                </h3>
+
+                <p class="text-muted">
+
+                    Cuando un cliente realice una reserva,
+                    aparecerá aquí.
+
+                </p>
+
+                <a
+                    href="/"
+                    class="btn btn-dark"
+                >
+                    Ir al sitio
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+</div>
+```
+
+</main>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+
+</html>

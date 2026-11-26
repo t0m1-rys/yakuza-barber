@@ -1,0 +1,614 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reserva Confirmada | Yakuza Barber</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #222 0%,
+                    #0b0b0b 45%,
+                    #050505 100%
+                );
+
+            color: #ffffff;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+        }
+
+
+        .contenedor {
+            width: 100%;
+
+            max-width: 520px;
+        }
+
+
+        /* ==========================================
+           ENCABEZADO
+        ========================================== */
+
+        .encabezado {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .logo {
+            font-size: 32px;
+
+            font-weight: bold;
+
+            letter-spacing: 5px;
+        }
+
+
+        .subtitulo {
+            color: #888;
+
+            font-size: 14px;
+
+            margin-top: 8px;
+        }
+
+
+        /* ==========================================
+           TARJETA
+        ========================================== */
+
+        .tarjeta {
+            background: #151515;
+
+            border: 1px solid #2c2c2c;
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.55);
+        }
+
+
+        /* ==========================================
+           ICONO
+        ========================================== */
+
+        .icono {
+            width: 80px;
+
+            height: 80px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            border: 2px solid #ffffff;
+
+            background: #202020;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 40px;
+
+            font-weight: bold;
+        }
+
+
+        /* ==========================================
+           TITULO
+        ========================================== */
+
+        .titulo {
+            text-align: center;
+
+            font-size: 27px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .mensaje {
+            text-align: center;
+
+            color: #999;
+
+            line-height: 1.6;
+
+            margin-bottom: 28px;
+        }
+
+
+        /* ==========================================
+           DETALLES
+        ========================================== */
+
+        .detalles {
+            background: #0d0d0d;
+
+            border: 1px solid #242424;
+
+            border-radius: 14px;
+
+            padding: 8px 18px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .fila {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #242424;
+        }
+
+
+        .fila:last-child {
+            border-bottom: none;
+        }
+
+
+        .etiqueta {
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        .valor {
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            text-align: right;
+        }
+
+
+        /* ==========================================
+           ESTADO
+        ========================================== */
+
+        .estado {
+            background: #1c1c1c;
+
+            border: 1px solid #303030;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            text-align: center;
+
+            color: #cccccc;
+
+            font-size: 14px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================================
+           BOTONES
+        ========================================== */
+
+        .botones {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .boton {
+            display: block;
+
+            width: 100%;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+            cursor: pointer;
+        }
+
+
+        /* ==========================================
+           BOTON PRINCIPAL
+        ========================================== */
+
+        .boton-principal {
+            background: #ffffff;
+
+            color: #000000;
+        }
+
+
+        .boton-principal:hover {
+            background: #dddddd;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* ==========================================
+           BOTON SECUNDARIO
+        ========================================== */
+
+        .boton-secundario {
+            background: #242424;
+
+            color: #ffffff;
+
+            border: 1px solid #353535;
+        }
+
+
+        .boton-secundario:hover {
+            background: #303030;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* ==========================================
+           PIE
+        ========================================== */
+
+        .pie {
+            text-align: center;
+
+            color: #555;
+
+            font-size: 12px;
+
+            margin-top: 20px;
+        }
+
+
+        /* ==========================================
+           CELULAR
+        ========================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+
+            .tarjeta {
+                padding: 22px;
+            }
+
+
+            .logo {
+                font-size: 25px;
+
+                letter-spacing: 3px;
+            }
+
+
+            .titulo {
+                font-size: 23px;
+            }
+
+
+            .fila {
+                align-items: flex-start;
+            }
+
+
+            .valor {
+                max-width: 55%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="contenedor">
+
+
+        <!-- ======================================
+             ENCABEZADO
+        ======================================= -->
+
+        <div class="encabezado">
+
+            <div class="logo">
+                YAKUZA BARBER
+            </div>
+
+            <div class="subtitulo">
+                Sistema de reservas
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             TARJETA
+        ======================================= -->
+
+        <div class="tarjeta">
+
+
+            <!-- ICONO -->
+
+            <div class="icono">
+                ✓
+            </div>
+
+
+            <!-- TITULO -->
+
+            <h1 class="titulo">
+                ¡Reserva confirmada!
+            </h1>
+
+
+            <p class="mensaje">
+
+                Tu reserva fue registrada
+                correctamente en Yakuza Barber.
+
+            </p>
+
+
+            <!-- ==================================
+                 DATOS DE LA RESERVA
+            =================================== -->
+
+            <div class="detalles">
+
+
+                <!-- CLIENTE -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Cliente
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.cliente.nombre }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- TELEFONO -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Teléfono
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.cliente.telefono }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- BARBERO -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Barbero
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.barbero.nombre }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- SERVICIO -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Servicio
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.servicio.nombre }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- FECHA -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Fecha
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.fecha.strftime('%d/%m/%Y') }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- HORA -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Hora
+                    </span>
+
+                    <span class="valor">
+
+                        {{ reserva.hora.strftime('%H:%M') }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- PRECIO -->
+
+                <div class="fila">
+
+                    <span class="etiqueta">
+                        Precio
+                    </span>
+
+                    <span class="valor">
+
+                        ${{ "{:,.0f}".format(
+                            reserva.servicio.precio
+                        ).replace(",", ".") }}
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==================================
+                 ESTADO
+            =================================== -->
+
+            <div class="estado">
+
+                ✓ Reserva registrada correctamente
+
+            </div>
+
+
+            <!-- ==================================
+                 BOTONES
+            =================================== -->
+
+            <div class="botones">
+
+
+                <!-- VOLVER AL INICIO -->
+
+                <a
+                    href="{{ url_for('inicio') }}"
+                    class="boton boton-principal"
+                >
+
+                    Volver al inicio
+
+                </a>
+
+
+                <!-- HACER OTRA RESERVA -->
+
+                <a
+                    href="{{ url_for('mostrar_barberos') }}"
+                    class="boton boton-secundario"
+                >
+
+                    Hacer otra reserva
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ======================================
+             PIE
+        ======================================= -->
+
+        <div class="pie">
+
+            Yakuza Barber © 2026
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
+```

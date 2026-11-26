@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Barberos | Yakuza Barber</title>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .contenedor {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .barbero-card {
+        transition: 0.2s ease;
+    }
+
+    .barbero-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .foto-barbero {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #212529;
+    }
+
+    .foto-placeholder {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #212529;
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 2.5rem;
+        font-weight: bold;
+
+        margin: auto;
+    }
+
+    .nombre-barbero {
+        font-size: 1.35rem;
+        font-weight: 700;
+    }
+
+    .especialidad {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .descripcion {
+        color: #777;
+        min-height: 48px;
+    }
+
+    .estado {
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 0.85rem;
+    }
+
+    .acciones {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .sin-barberos {
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+    @media (max-width: 576px) {
+
+        .foto-barbero,
+        .foto-placeholder {
+            width: 100px;
+            height: 100px;
+        }
+
+        .acciones {
+            flex-direction: column;
+        }
+
+        .acciones a {
+            width: 100%;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- ==================================================
+     NAVBAR
+================================================== -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+```
+<div class="container-fluid">
+
+    <a
+        class="navbar-brand"
+        href="/admin"
+    >
+        YAKUZA BARBER | ADMIN
+    </a>
+
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="/"
+            class="btn btn-outline-light btn-sm"
+        >
+            Ver sitio
+        </a>
+
+        <a
+            href="/logout"
+            class="btn btn-outline-danger btn-sm"
+        >
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</div>
+```
+
+</nav>
+
+<!-- ==================================================
+     CONTENIDO
+================================================== -->
+
+<main class="container-fluid py-4">
+
+```
+<div class="contenedor">
+
+
+    <!-- ==================================================
+         ENCABEZADO
+    ================================================== -->
+
+    <div
+        class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3"
+    >
+
+        <div>
+
+            <h1 class="mb-1">
+                Barberos
+            </h1>
+
+            <p class="text-muted mb-0">
+                Administra los barberos de Yakuza Barber.
+            </p>
+
+        </div>
+
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            <a
+                href="/admin"
+                class="btn btn-outline-dark"
+            >
+                ← Panel
+            </a>
+
+            <a
+                href="/admin/barbero/nuevo"
+                class="btn btn-dark"
+            >
+                + Nuevo barbero
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         MENSAJES
+    ================================================== -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            {% for categoria, mensaje in messages %}
+
+                <div
+                    class="alert alert-{{ categoria }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ mensaje }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- ==================================================
+         BARBEROS
+    ================================================== -->
+
+    {% if barberos %}
+
+        <div class="row g-4">
+
+            {% for barbero in barberos %}
+
+                <div class="col-12 col-md-6 col-xl-4">
+
+                    <div class="card shadow-sm h-100 barbero-card">
+
+                        <div class="card-body text-center p-4">
+
+
+                            <!-- ==================================
+                                 FOTO
+                            ================================== -->
+
+                            {% if barbero.foto %}
+
+                                <img
+                                    src="{{ url_for(
+                                        'static',
+                                        filename='img/barberos/' ~ barbero.foto
+                                    ) }}"
+                                    alt="Foto de {{ barbero.nombre }}"
+                                    class="foto-barbero mb-3"
+                                >
+
+                            {% else %}
+
+                                <div class="foto-placeholder mb-3">
+
+                                    {{ barbero.nombre[0]|upper }}
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                            <!-- ==================================
+                                 NOMBRE
+                            ================================== -->
+
+                            <div class="nombre-barbero mb-1">
+
+                                {{ barbero.nombre }}
+
+                            </div>
+
+
+
+                            <!-- ==================================
+                                 ESPECIALIDAD
+                            ================================== -->
+
+                            {% if barbero.especialidad %}
+
+                                <div class="especialidad mb-2">
+
+                                    {{ barbero.especialidad }}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="text-muted mb-2">
+
+                                    Sin especialidad registrada
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                            <!-- ==================================
+                                 DESCRIPCIÓN
+                            ================================== -->
+
+                            {% if barbero.descripcion %}
+
+                                <p class="descripcion mb-3">
+
+                                    {{ barbero.descripcion }}
+
+                                </p>
+
+                            {% else %}
+
+                                <p class="descripcion mb-3">
+
+                                    Sin descripción registrada.
+
+                                </p>
+
+                            {% endif %}
+
+
+
+                            <!-- ==================================
+                                 ESTADO
+                            ================================== -->
+
+                            {% if barbero.activo %}
+
+                                <span
+                                    class="badge bg-success estado"
+                                >
+                                    ● Activo
+                                </span>
+
+                            {% else %}
+
+                                <span
+                                    class="badge bg-danger estado"
+                                >
+                                    ● Inactivo
+                                </span>
+
+                            {% endif %}
+
+
+
+                            <hr class="my-4">
+
+
+
+                            <!-- ==================================
+                                 ACCIONES
+                            ================================== -->
+
+                            <div class="acciones">
+
+
+                                <!-- EDITAR -->
+
+                                <a
+                                    href="/admin/barbero/{{ barbero.id }}/editar"
+                                    class="btn btn-dark btn-sm"
+                                >
+                                    ✏️ Editar
+                                </a>
+
+
+
+                                <!-- ACTIVAR / DESACTIVAR -->
+
+                                {% if barbero.activo %}
+
+                                    <a
+                                        href="/admin/barbero/{{ barbero.id }}/toggle"
+                                        class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('¿Seguro que deseas desactivar a {{ barbero.nombre }}?');"
+                                    >
+                                        🔴 Desactivar
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="/admin/barbero/{{ barbero.id }}/toggle"
+                                        class="btn btn-outline-success btn-sm"
+                                    >
+                                        🟢 Activar
+                                    </a>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- ==================================================
+             SIN BARBEROS
+        ================================================== -->
+
+        <div class="card shadow-sm">
+
+            <div class="card-body sin-barberos">
+
+                <div class="display-3 mb-3">
+                    👤
+                </div>
+
+                <h3>
+                    No hay barberos registrados
+                </h3>
+
+                <p class="text-muted">
+
+                    Agrega el primer barbero para comenzar
+                    a administrar el equipo.
+
+                </p>
+
+                <a
+                    href="/admin/barbero/nuevo"
+                    class="btn btn-dark"
+                >
+                    + Crear primer barbero
+                </a>
+
+            </div>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+```
+
+</main>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Variables secretas
+.env
+
+# Editor
+.vscode/
+
+# Bases de datos locales y respaldos
+instance/*.db
+instance/*.sqlite
+instance/*.sqlite3
+
+# Scripts de mantenimiento locales
+borrar_camilo.py
+migrar.py
+
+crear_barberos.py
+crear_servicios.py
+crear_admin.py
+
+# Respaldos temporales
+app_respaldo.py
+requirements_respaldo.txt
+index_respaldo.html
+
+# Scripts administrativos
+crear_admin.py
+crear_barberos.py
+crear_servicios.py
+borrar_camilo.py
+migrar.py
+
+# Base de datos
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Entorno y secretos
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc

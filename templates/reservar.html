@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+>
+
+<title>Reservar hora | Yakuza Barber</title>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+    /* ==================================================
+       GENERAL
+    ================================================== */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #f4f4f4;
+        color: #212529;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 3px;
+    }
+
+    .reserva-container {
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+    }
+
+
+    /* ==================================================
+       CABECERA BARBERO
+    ================================================== */
+
+    .barbero-header {
+        background: linear-gradient(
+            135deg,
+            #111111,
+            #2b2b2b
+        );
+
+        color: white;
+
+        border-radius: 20px;
+
+        padding: 35px 25px;
+
+        margin-bottom: 25px;
+
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .barbero-header .subtitulo {
+        color: #bbbbbb;
+        font-size: 0.95rem;
+        letter-spacing: 2px;
+    }
+
+    .barbero-header h1 {
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .barbero-header h2 {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+
+    /* ==================================================
+       TARJETAS
+    ================================================== */
+
+    .seccion-card {
+        border: none;
+        border-radius: 18px;
+
+        box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.08);
+
+        margin-bottom: 22px;
+
+        overflow: hidden;
+    }
+
+    .seccion-card .card-body {
+        padding: 28px;
+    }
+
+    .numero-paso {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+
+        border-radius: 50%;
+
+        background: #212529;
+        color: white;
+
+        font-weight: bold;
+
+        margin-right: 10px;
+    }
+
+    .titulo-seccion {
+        display: flex;
+        align-items: center;
+
+        margin-bottom: 22px;
+
+        font-weight: 700;
+    }
+
+
+    /* ==================================================
+       SERVICIOS
+    ================================================== */
+
+    .servicio-card {
+        border: 2px solid #e2e2e2;
+
+        border-radius: 15px;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+
+        height: 100%;
+
+        background: white;
+
+        position: relative;
+
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .servicio-card:hover {
+        transform: translateY(-3px);
+
+        border-color: #777;
+
+        box-shadow:
+            0 7px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .servicio-card.seleccionado {
+        border-color: #212529;
+
+        background: #f0f0f0;
+
+        box-shadow:
+            0 7px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .servicio-card.seleccionado::before {
+        content: "✓";
+
+        position: absolute;
+
+        top: 12px;
+        right: 12px;
+
+        width: 28px;
+        height: 28px;
+
+        background: #212529;
+        color: white;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-weight: bold;
+    }
+
+    .servicio-nombre {
+        font-size: 1.15rem;
+        font-weight: 700;
+
+        padding-right: 35px;
+    }
+
+    .servicio-descripcion {
+        color: #6c757d;
+        font-size: 0.9rem;
+
+        min-height: 20px;
+    }
+
+    .precio {
+        font-size: 1.35rem;
+        font-weight: 800;
+
+        margin-top: 12px;
+    }
+
+    .duracion {
+        color: #6c757d;
+
+        font-size: 0.9rem;
+
+        margin-top: 4px;
+    }
+
+    .servicio-radio {
+        display: none;
+    }
+
+    .boton-servicio {
+        width: 100%;
+
+        border-radius: 10px;
+
+        font-weight: 600;
+
+        min-height: 44px;
+    }
+
+
+    /* ==================================================
+       FECHA
+    ================================================== */
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 11px;
+
+        padding: 13px 14px;
+
+        min-height: 50px;
+
+        border: 1px solid #d5d5d5;
+
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #212529;
+
+        box-shadow:
+            0 0 0 0.15rem rgba(33, 37, 41, 0.12);
+    }
+
+    .horario-info {
+        border-radius: 12px;
+
+        margin-top: 18px;
+
+        border: none;
+
+        font-size: 0.92rem;
+    }
+
+
+    /* ==================================================
+       HORARIOS
+    ================================================== */
+
+    .horarios-container {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fit, minmax(110px, 1fr));
+
+        gap: 10px;
+    }
+
+    .hora-btn {
+        border: 2px solid #212529;
+
+        background: white;
+
+        color: #212529;
+
+        padding: 13px 8px;
+
+        min-height: 50px;
+
+        border-radius: 11px;
+
+        cursor: pointer;
+
+        font-weight: 700;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .hora-btn:hover {
+        background: #212529;
+        color: white;
+
+        transform: translateY(-2px);
+    }
+
+    .hora-btn.seleccionada {
+        background: #212529;
+        color: white;
+
+        box-shadow:
+            0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .sin-horarios {
+        text-align: center;
+
+        padding: 25px;
+
+        color: #6c757d;
+
+        background: #f8f9fa;
+
+        border-radius: 12px;
+    }
+
+
+    /* ==================================================
+       RESUMEN
+    ================================================== */
+
+    .resumen {
+        background: #212529;
+
+        color: white;
+
+        border-radius: 16px;
+
+        padding: 22px;
+
+        margin-top: 20px;
+
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .resumen-titulo {
+        font-size: 0.85rem;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        color: #bdbdbd;
+
+        margin-bottom: 12px;
+    }
+
+    .resumen-servicio {
+        font-size: 1.15rem;
+
+        font-weight: 700;
+    }
+
+    .resumen-datos {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 10px;
+
+        margin-top: 18px;
+    }
+
+    .resumen-item {
+        background:
+            rgba(255, 255, 255, 0.08);
+
+        border-radius: 10px;
+
+        padding: 12px;
+    }
+
+    .resumen-item small {
+        display: block;
+
+        color: #aaa;
+
+        margin-bottom: 3px;
+    }
+
+    .resumen-item strong {
+        font-size: 1rem;
+    }
+
+
+    /* ==================================================
+       CONFIRMAR
+    ================================================== */
+
+    .confirmar-card {
+        background: white;
+
+        border-radius: 18px;
+
+        box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.08);
+
+        border: none;
+    }
+
+    .btn-confirmar {
+        background: #212529;
+
+        color: white;
+
+        border: none;
+
+        border-radius: 12px;
+
+        padding: 15px 35px;
+
+        min-height: 54px;
+
+        font-size: 1.05rem;
+
+        font-weight: 700;
+
+        transition: 0.2s;
+    }
+
+    .btn-confirmar:hover {
+        background: #000;
+
+        color: white;
+
+        transform: translateY(-2px);
+    }
+
+    .btn-confirmar:disabled {
+        background: #999;
+
+        cursor: not-allowed;
+
+        transform: none;
+    }
+
+
+    /* ==================================================
+       MOBILE
+    ================================================== */
+
+    @media (max-width: 576px) {
+
+        body {
+            font-size: 15px;
+        }
+
+        .navbar {
+            min-height: 58px;
+        }
+
+        .navbar-brand {
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        main.container {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        .barbero-header {
+            border-radius: 15px;
+
+            padding: 27px 16px;
+
+            margin-bottom: 16px;
+        }
+
+        .barbero-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .barbero-header h2 {
+            font-size: 1.35rem;
+        }
+
+        .barbero-header .subtitulo {
+            font-size: 0.78rem;
+            letter-spacing: 1.5px;
+        }
+
+        .seccion-card {
+            border-radius: 15px;
+
+            margin-bottom: 15px;
+        }
+
+        .seccion-card .card-body {
+            padding: 18px;
+        }
+
+        .titulo-seccion {
+            font-size: 1.1rem;
+
+            margin-bottom: 18px;
+        }
+
+        .numero-paso {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+
+            margin-right: 8px;
+        }
+
+        /* Servicios */
+
+        .servicio-card {
+            padding: 16px !important;
+        }
+
+        .servicio-nombre {
+            font-size: 1.05rem;
+        }
+
+        .precio {
+            font-size: 1.25rem;
+        }
+
+        .boton-servicio {
+            min-height: 48px;
+        }
+
+        /* Fecha */
+
+        .form-control {
+            min-height: 52px;
+
+            font-size: 16px;
+        }
+
+        .horario-info {
+            font-size: 0.85rem;
+
+            padding: 14px;
+        }
+
+        /* Horarios */
+
+        .horarios-container {
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+        .hora-btn {
+            min-height: 50px;
+
+            padding: 10px 4px;
+
+            font-size: 0.9rem;
+        }
+
+        /* Resumen */
+
+        .resumen {
+            padding: 18px;
+
+            border-radius: 14px;
+        }
+
+        .resumen-servicio {
+            font-size: 1.05rem;
+        }
+
+        .resumen-datos {
+            grid-template-columns: 1fr;
+
+            gap: 7px;
+
+            margin-top: 14px;
+        }
+
+        .resumen-item {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 10px 12px;
+        }
+
+        .resumen-item small {
+            margin: 0;
+        }
+
+        /* Confirmación */
+
+        .confirmar-card .card-body {
+            padding: 20px 15px !important;
+        }
+
+        .btn-confirmar {
+            width: 100%;
+
+            min-height: 56px;
+
+            font-size: 1rem;
+        }
+
+    }
+
+
+    /* ==================================================
+       PANTALLAS MUY PEQUEÑAS
+    ================================================== */
+
+    @media (max-width: 360px) {
+
+        .navbar-brand {
+            font-size: 0.9rem;
+        }
+
+        .barbero-header h1 {
+            font-size: 1.55rem;
+        }
+
+        .barbero-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .titulo-seccion {
+            font-size: 1rem;
+        }
+
+        .horarios-container {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+        .hora-btn {
+            font-size: 0.95rem;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+```
+<div class="container">
+
+    <a
+        class="navbar-brand"
+        href="/"
+    >
+        YAKUZA BARBER
+    </a>
+
+</div>
+```
+
+</nav>
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<main class="container py-4 py-md-5">
+
+```
+<div class="reserva-container">
+
+
+    <!-- =================================================
+         BARBERO
+    ================================================== -->
+
+    <div class="barbero-header text-center">
+
+        <div class="subtitulo mb-2">
+            RESERVA ONLINE
+        </div>
+
+        <h1>
+            Reservar hora
+        </h1>
+
+        <h2>
+            {{ barbero.nombre }}
+        </h2>
+
+        {% if barbero.especialidad %}
+
+            <p class="mb-0 text-light">
+                {{ barbero.especialidad }}
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =================================================
+         MENSAJES
+    ================================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for categoria, mensaje in messages %}
+
+                <div
+                    class="alert alert-{{ categoria }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ mensaje }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         FORMULARIO
+    ================================================== -->
+
+    <form
+        method="POST"
+        id="form-reserva"
+    >
+
+
+        <!-- =================================================
+             1. SERVICIO
+        ================================================== -->
+
+        <div class="card seccion-card">
+
+            <div class="card-body">
+
+                <h3 class="titulo-seccion">
+
+                    <span class="numero-paso">
+                        1
+                    </span>
+
+                    Elige tu servicio
+
+                </h3>
+
+
+                <div class="row g-3">
+
+                    {% for servicio in servicios %}
+
+                        <div class="col-12 col-md-6">
+
+                            <div
+                                class="servicio-card p-3"
+                                data-servicio-id="{{ servicio.id }}"
+                                data-nombre="{{ servicio.nombre }}"
+                                data-precio="{{ servicio.precio }}"
+                                data-duracion="{{ servicio.duracion }}"
+                            >
+
+                                <input
+                                    type="radio"
+                                    name="servicio_id"
+                                    value="{{ servicio.id }}"
+                                    class="servicio-radio"
+                                    required
+                                >
+
+
+                                <div class="servicio-nombre">
+
+                                    {{ servicio.nombre }}
+
+                                </div>
+
+
+                                {% if servicio.descripcion %}
+
+                                    <div class="servicio-descripcion mt-2">
+
+                                        {{ servicio.descripcion }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="precio">
+
+                                    ${{ "{:,}".format(
+                                        servicio.precio
+                                    ).replace(",", ".") }}
+
+                                </div>
+
+
+                                <div class="duracion">
+
+                                    ⏱ {{ servicio.duracion }} minutos
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-dark btn-sm boton-servicio mt-3"
+                                >
+
+                                    Seleccionar servicio
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             2. FECHA
+        ================================================== -->
+
+        <div class="card seccion-card">
+
+            <div class="card-body">
+
+                <h3 class="titulo-seccion">
+
+                    <span class="numero-paso">
+                        2
+                    </span>
+
+                    Elige una fecha
+
+                </h3>
+
+
+                <label
+                    for="fecha"
+                    class="form-label"
+                >
+
+                    Fecha de tu reserva
+
+                </label>
+
+
+                <input
+                    type="date"
+                    id="fecha"
+                    name="fecha"
+                    class="form-control"
+                    required
+                >
+
+
+                <div class="alert alert-light horario-info">
+
+                    <strong>
+                        Horario de atención
+                    </strong>
+
+                    <br>
+
+                    <span>
+                        Lunes a viernes:
+                        11:00 - 13:00 y 15:00 - 19:00
+                    </span>
+
+                    <br>
+
+                    <span>
+                        Sábado:
+                        10:00 - 13:00 y 15:00 - 18:00
+                    </span>
+
+                    <br>
+
+                    <span>
+                        Domingo:
+                        Cerrado
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             3. HORARIO
+        ================================================== -->
+
+        <div
+            id="horarios-card"
+            class="card seccion-card"
+            style="display: none;"
+        >
+
+            <div class="card-body">
+
+                <h3 class="titulo-seccion">
+
+                    <span class="numero-paso">
+                        3
+                    </span>
+
+                    Elige una hora
+
+                </h3>
+
+
+                <div
+                    id="cargando"
+                    class="text-center py-3"
+                    style="display: none;"
+                >
+
+                    <div
+                        class="spinner-border"
+                        role="status"
+                    ></div>
+
+                    <p class="mt-2 mb-0">
+
+                        Buscando horarios disponibles...
+
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="horarios"
+                    class="horarios-container"
+                ></div>
+
+
+                <div
+                    id="sin-horarios"
+                    class="sin-horarios"
+                    style="display: none;"
+                >
+
+                    No hay horarios disponibles para esta fecha.
+
+                </div>
+
+
+                <input
+                    type="hidden"
+                    name="hora"
+                    id="hora"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RESUMEN
+        ================================================== -->
+
+        <div
+            id="resumen"
+            class="resumen"
+            style="display: none;"
+        >
+
+            <div class="resumen-titulo">
+                Tu reserva
+            </div>
+
+
+            <div
+                id="resumen-servicio"
+                class="resumen-servicio"
+            ></div>
+
+
+            <div class="resumen-datos">
+
+                <div class="resumen-item">
+
+                    <small>
+                        Fecha
+                    </small>
+
+                    <strong id="resumen-fecha">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="resumen-item">
+
+                    <small>
+                        Hora
+                    </small>
+
+                    <strong id="resumen-hora">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="resumen-item">
+
+                    <small>
+                        Duración
+                    </small>
+
+                    <strong id="resumen-duracion">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-3">
+
+                <span class="text-secondary">
+                    Precio:
+                </span>
+
+                <strong
+                    id="resumen-precio"
+                    class="ms-1"
+                ></strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             4. DATOS DEL CLIENTE
+        ================================================== -->
+
+        <div class="card seccion-card mt-4">
+
+            <div class="card-body">
+
+                <h3 class="titulo-seccion">
+
+                    <span class="numero-paso">
+                        4
+                    </span>
+
+                    Tus datos
+
+                </h3>
+
+
+                <div class="mb-3">
+
+                    <label
+                        for="nombre"
+                        class="form-label"
+                    >
+
+                        Nombre completo
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        class="form-control"
+                        placeholder="Ej: Juan Pérez"
+                        maxlength="100"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label
+                        for="telefono"
+                        class="form-label"
+                    >
+
+                        Teléfono
+
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        class="form-control"
+                        placeholder="Ej: 9 1234 5678"
+                        maxlength="20"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mb-0">
+
+                    <label
+                        for="email"
+                        class="form-label"
+                    >
+
+                        Correo electrónico
+
+                        <span class="text-muted fw-normal">
+                            (opcional)
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Ej: correo@gmail.com"
+                        maxlength="120"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             5. CONFIRMAR
+        ================================================== -->
+
+        <div class="card confirmar-card mt-4">
+
+            <div class="card-body p-4 text-center">
+
+                <h3 class="mb-2">
+                    5. Confirmar reserva
+                </h3>
+
+                <p class="text-muted">
+
+                    Revisa que todos tus datos sean correctos
+                    antes de confirmar.
+
+                </p>
+
+
+                <button
+                    type="submit"
+                    id="btn-confirmar"
+                    class="btn btn-confirmar"
+                    disabled
+                >
+
+                    Confirmar reserva
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </form>
+
+
+    <!-- =================================================
+         VOLVER
+    ================================================== -->
+
+    <div class="text-center mt-4 mb-3">
+
+        <a
+            href="/barberos"
+            class="text-decoration-none text-dark"
+        >
+
+            ← Volver a barberos
+
+        </a>
+
+    </div>
+
+
+</div>
+```
+
+</main>
+
+<!-- =====================================================
+     BOOTSTRAP
+===================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+<script>
+
+    // =====================================================
+    // VARIABLES
+    // =====================================================
+
+    const tarjetasServicio =
+        document.querySelectorAll(".servicio-card");
+
+    const fechaInput =
+        document.getElementById("fecha");
+
+    const horariosCard =
+        document.getElementById("horarios-card");
+
+    const horarios =
+        document.getElementById("horarios");
+
+    const cargando =
+        document.getElementById("cargando");
+
+    const sinHorarios =
+        document.getElementById("sin-horarios");
+
+    const horaInput =
+        document.getElementById("hora");
+
+    const resumen =
+        document.getElementById("resumen");
+
+    const btnConfirmar =
+        document.getElementById("btn-confirmar");
+
+
+    // =====================================================
+    // FECHA LOCAL
+    // =====================================================
+
+    function obtenerFechaLocal() {
+
+        const ahora = new Date();
+
+        const año =
+            ahora.getFullYear();
+
+        const mes =
+            String(
+                ahora.getMonth() + 1
+            ).padStart(2, "0");
+
+        const dia =
+            String(
+                ahora.getDate()
+            ).padStart(2, "0");
+
+        return `${año}-${mes}-${dia}`;
+    }
+
+
+    const hoy =
+        obtenerFechaLocal();
+
+    fechaInput.min =
+        hoy;
+
+
+    // =====================================================
+    // FORMATEAR PRECIO
+    // =====================================================
+
+    function formatearPrecio(numero) {
+
+        return "$" +
+            Number(numero)
+                .toLocaleString("es-CL");
+
+    }
+
+
+    // =====================================================
+    // SELECCIONAR SERVICIO
+    // =====================================================
+
+    tarjetasServicio.forEach(
+        function(tarjeta) {
+
+            tarjeta.addEventListener(
+                "click",
+                function(event) {
+
+                    const radio =
+                        tarjeta.querySelector(
+                            ".servicio-radio"
+                        );
+
+                    if (!radio) {
+                        return;
+                    }
+
+
+                    radio.checked =
+                        true;
+
+
+                    tarjetasServicio.forEach(
+                        function(otraTarjeta) {
+
+                            otraTarjeta.classList.remove(
+                                "seleccionado"
+                            );
+
+                        }
+                    );
+
+
+                    tarjeta.classList.add(
+                        "seleccionado"
+                    );
+
+
+                    tarjetasServicio.forEach(
+                        function(otraTarjeta) {
+
+                            const boton =
+                                otraTarjeta.querySelector(
+                                    ".boton-servicio"
+                                );
+
+                            if (!boton) {
+                                return;
+                            }
+
+
+                            if (
+                                otraTarjeta === tarjeta
+                            ) {
+
+                                boton.textContent =
+                                    "✓ Servicio seleccionado";
+
+                                boton.classList.remove(
+                                    "btn-outline-dark"
+                                );
+
+                                boton.classList.add(
+                                    "btn-dark"
+                                );
+
+                            } else {
+
+                                boton.textContent =
+                                    "Seleccionar servicio";
+
+                                boton.classList.remove(
+                                    "btn-dark"
+                                );
+
+                                boton.classList.add(
+                                    "btn-outline-dark"
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    horaInput.value =
+                        "";
+
+
+                    actualizarHorarios();
+
+                    actualizarResumen();
+
+                }
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // CAMBIO DE FECHA
+    // =====================================================
+
+    fechaInput.addEventListener(
+        "change",
+        function() {
+
+            horaInput.value =
+                "";
+
+            actualizarHorarios();
+
+            actualizarResumen();
+
+        }
+    );
+
+
+    // =====================================================
+    // ACTUALIZAR HORARIOS
+    // =====================================================
+
+    function actualizarHorarios() {
+
+        const servicio =
+            document.querySelector(
+                ".servicio-radio:checked"
+            );
+
+        const fecha =
+            fechaInput.value;
+
+
+        horaInput.value =
+            "";
+
+        horarios.innerHTML =
+            "";
+
+        sinHorarios.style.display =
+            "none";
+
+
+        if (!servicio || !fecha) {
+
+            horariosCard.style.display =
+                "none";
+
+            actualizarBotonConfirmar();
+
+            return;
+
+        }
+
+
+        horariosCard.style.display =
+            "block";
+
+
+        cargando.style.display =
+            "block";
+
+
+        const barberoId =
+            "{{ barbero.id }}";
+
+
+        const url =
+            "/horarios-disponibles/"
+            + barberoId
+            + "?fecha="
+            + encodeURIComponent(fecha)
+            + "&servicio_id="
+            + encodeURIComponent(servicio.value);
+
+
+        fetch(url)
+
+            .then(
+                function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Error al consultar horarios"
+                        );
+
+                    }
+
+                    return response.json();
+
+                }
+            )
+
+            .then(
+                function(data) {
+
+                    cargando.style.display =
+                        "none";
+
+
+                    if (
+                        !data.horarios ||
+                        data.horarios.length === 0
+                    ) {
+
+                        sinHorarios.textContent =
+                            "No hay horarios disponibles para esta fecha.";
+
+                        sinHorarios.style.display =
+                            "block";
+
+                        actualizarBotonConfirmar();
+
+                        return;
+
+                    }
+
+
+                    data.horarios.forEach(
+                        function(horaDisponible) {
+
+                            const boton =
+                                document.createElement(
+                                    "button"
+                                );
+
+
+                            boton.type =
+                                "button";
+
+
+                            boton.className =
+                                "hora-btn";
+
+
+                            boton.textContent =
+                                horaDisponible;
+
+
+                            boton.addEventListener(
+                                "click",
+                                function() {
+
+                                    seleccionarHora(
+                                        boton,
+                                        horaDisponible
+                                    );
+
+                                }
+                            );
+
+
+                            horarios.appendChild(
+                                boton
+                            );
+
+                        }
+                    );
+
+                }
+            )
+
+            .catch(
+                function(error) {
+
+                    console.error(error);
+
+
+                    cargando.style.display =
+                        "none";
+
+
+                    sinHorarios.textContent =
+                        "No fue posible cargar los horarios. Intenta nuevamente.";
+
+
+                    sinHorarios.style.display =
+                        "block";
+
+
+                    actualizarBotonConfirmar();
+
+                }
+            );
+
+    }
+
+
+    // =====================================================
+    // SELECCIONAR HORA
+    // =====================================================
+
+    function seleccionarHora(
+        boton,
+        horaSeleccionada
+    ) {
+
+        document.querySelectorAll(
+            ".hora-btn"
+        ).forEach(
+            function(btn) {
+
+                btn.classList.remove(
+                    "seleccionada"
+                );
+
+            }
+        );
+
+
+        boton.classList.add(
+            "seleccionada"
+        );
+
+
+        horaInput.value =
+            horaSeleccionada;
+
+
+        actualizarResumen();
+
+        actualizarBotonConfirmar();
+
+    }
+
+
+    // =====================================================
+    // ACTUALIZAR RESUMEN
+    // =====================================================
+
+    function actualizarResumen() {
+
+        const servicio =
+            document.querySelector(
+                ".servicio-radio:checked"
+            );
+
+        const fecha =
+            fechaInput.value;
+
+        const hora =
+            horaInput.value;
+
+
+        if (!servicio) {
+
+            resumen.style.display =
+                "none";
+
+            actualizarBotonConfirmar();
+
+            return;
+
+        }
+
+
+        const tarjeta =
+            document.querySelector(
+                `.servicio-card[data-servicio-id="${servicio.value}"]`
+            );
+
+
+        if (!tarjeta) {
+            return;
+        }
+
+
+        const nombre =
+            tarjeta.dataset.nombre;
+
+        const precio =
+            tarjeta.dataset.precio;
+
+        const duracion =
+            tarjeta.dataset.duracion;
+
+
+        document.getElementById(
+            "resumen-servicio"
+        ).textContent =
+            nombre;
+
+
+        document.getElementById(
+            "resumen-precio"
+        ).textContent =
+            formatearPrecio(precio);
+
+
+        document.getElementById(
+            "resumen-duracion"
+        ).textContent =
+            duracion + " min";
+
+
+        if (fecha) {
+
+            const partes =
+                fecha.split("-");
+
+
+            const fechaFormateada =
+                `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+
+            document.getElementById(
+                "resumen-fecha"
+            ).textContent =
+                fechaFormateada;
+
+        } else {
+
+            document.getElementById(
+                "resumen-fecha"
+            ).textContent =
+                "-";
+
+        }
+
+
+        document.getElementById(
+            "resumen-hora"
+        ).textContent =
+            hora || "-";
+
+
+        resumen.style.display =
+            "block";
+
+
+        actualizarBotonConfirmar();
+
+    }
+
+
+    // =====================================================
+    // ACTIVAR / DESACTIVAR BOTÓN
+    // =====================================================
+
+    function actualizarBotonConfirmar() {
+
+        const servicio =
+            document.querySelector(
+                ".servicio-radio:checked"
+            );
+
+        const fecha =
+            fechaInput.value;
+
+        const hora =
+            horaInput.value;
+
+        const nombre =
+            document.getElementById(
+                "nombre"
+            ).value.trim();
+
+        const telefono =
+            document.getElementById(
+                "telefono"
+            ).value.trim();
+
+
+        const todoCompleto =
+            servicio &&
+            fecha &&
+            hora &&
+            nombre &&
+            telefono;
+
+
+        btnConfirmar.disabled =
+            !todoCompleto;
+
+    }
+
+
+    // =====================================================
+    // DATOS CLIENTE
+    // =====================================================
+
+    document.getElementById(
+        "nombre"
+    ).addEventListener(
+        "input",
+        actualizarBotonConfirmar
+    );
+
+
+    document.getElementById(
+        "telefono"
+    ).addEventListener(
+        "input",
+        actualizarBotonConfirmar
+    );
+
+
+    // =====================================================
+    // EVITAR DOMINGOS
+    // =====================================================
+
+    fechaInput.addEventListener(
+        "change",
+        function() {
+
+            if (!fechaInput.value) {
+                return;
+            }
+
+
+            const fecha =
+                new Date(
+                    fechaInput.value +
+                    "T12:00:00"
+                );
+
+
+            if (fecha.getDay() === 0) {
+
+                alert(
+                    "Yakuza Barber no atiende los domingos."
+                );
+
+
+                fechaInput.value =
+                    "";
+
+                horariosCard.style.display =
+                    "none";
+
+                resumen.style.display =
+                    "none";
+
+                horaInput.value =
+                    "";
+
+                actualizarBotonConfirmar();
+
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // VALIDACIÓN FINAL
+    // =====================================================
+
+    document.getElementById(
+        "form-reserva"
+    ).addEventListener(
+        "submit",
+        function(event) {
+
+            const servicio =
+                document.querySelector(
+                    ".servicio-radio:checked"
+                );
+
+
+            if (!servicio) {
+
+                event.preventDefault();
+
+                alert(
+                    "Selecciona un servicio."
+                );
+
+                return;
+
+            }
+
+
+            if (!fechaInput.value) {
+
+                event.preventDefault();
+
+                alert(
+                    "Selecciona una fecha."
+                );
+
+                return;
+
+            }
+
+
+            if (!horaInput.value) {
+
+                event.preventDefault();
+
+                alert(
+                    "Selecciona una hora disponible."
+                );
+
+                return;
+
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // INICIO
+    // =====================================================
+
+    actualizarBotonConfirmar();
+
+</script>
+
+</body>
+
+</html>
