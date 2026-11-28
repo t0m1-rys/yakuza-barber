@@ -38,28 +38,51 @@ from urllib.parse import quote
 # CONFIGURACIÓN DE FLASK
 # ==========================================================
 
+
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
 if not app.config["SECRET_KEY"]:
     raise RuntimeError("Falta configurar SECRET_KEY")
+
 # ==========================================================
 # CONFIGURACIÓN DE BASE DE DATOS
 # ==========================================================
 
-DATABASE_PATH = os.environ.get("DATABASE_PATH")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if DATABASE_PATH:
-    os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
-    database_uri = "sqlite:///" + DATABASE_PATH
+if DATABASE_URL:
+    # Compatibilidad con las direcciones de Render
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgres://",
+            "postgresql+psycopg://",
+            1
+        )
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgresql://",
+            "postgresql+psycopg://",
+            1
+        )
+
+    database_uri = DATABASE_URL
+
 else:
-    database_uri = "sqlite:///yakuza.db"
+    DATABASE_PATH = os.environ.get("DATABASE_PATH")
+
+    if DATABASE_PATH:
+        os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
+        database_uri = "sqlite:///" + DATABASE_PATH
+    else:
+        database_uri = "sqlite:///yakuza.db"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+
 
 
 # ==========================================================
@@ -83,19 +106,25 @@ def inicio():
 # PÁGINA DE BARBEROS
 # ==========================================================
 
+
 @app.route("/barberos")
 def mostrar_barberos():
 
-    barberos = Barbero.query.filter_by(
-        activo=True
-    ).all()
+    try:
+        barberos = (
+            Barbero.query
+            .order_by(Barbero.id.asc())
+            .all()
+        )
 
-    return render_template(
-        "barberos.html",
-        barberos=barberos
-    )
+        return render_template(
+            "barberos.html",
+            barberos=barberos
+        )
 
-
+    except Exception as e:
+        app.logger.exception("Error al cargar los barberos")
+        return "Error al cargar los barberos", 500
 # ==========================================================
 # RESERVAR HORA
 # ==========================================================

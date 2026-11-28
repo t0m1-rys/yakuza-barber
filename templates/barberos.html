@@ -38,16 +38,16 @@
         }
 
         .foto {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #777;
         }
 
         .placeholder {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             background: #333;
             display: flex;
@@ -80,8 +80,13 @@
 
 <nav class="navbar navbar-dark bg-black py-3">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">YAKUZA BARBER</a>
-        <a href="/" class="btn btn-outline-light btn-sm">Inicio</a>
+        <a class="navbar-brand fw-bold" href="/">
+            YAKUZA BARBER
+        </a>
+
+        <a href="/" class="btn btn-outline-light btn-sm">
+            Inicio
+        </a>
     </div>
 </nav>
 
@@ -89,6 +94,7 @@
 
     <div class="text-center mb-5">
         <h1 class="titulo">NUESTROS BARBEROS</h1>
+
         <p class="texto-secundario">
             Conoce a nuestro equipo y elige quién realizará tu próximo corte.
         </p>
@@ -96,60 +102,76 @@
 
     {% if barberos %}
 
-        <div class="row g-4 justify-content-center">
+    <div class="row g-4 justify-content-center">
 
-            {% for barbero in barberos %}
+        {% for barbero in barberos %}
 
-                <div class="col-12 col-md-6 col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4">
 
-                    <div class="barbero-card h-100 p-4 text-center">
+            <div class="barbero-card h-100 p-4 text-center">
 
-                        {% if barbero.foto %}
-                            <img
-                                src="{{ url_for('static', filename='img/barberos/' ~ barbero.foto) }}"
-                                alt="Foto de {{ barbero.nombre }}"
-                                class="foto mb-3"
-                            >
-                        {% else %}
-                            <div class="placeholder mb-3">
-                                {{ barbero.nombre[0]|upper }}
-                            </div>
-                        {% endif %}
+                {% if barbero.foto %}
 
-                        <h3 class="fw-bold">{{ barbero.nombre }}</h3>
+                <img
+                    src="{{ url_for('static', filename='img/barberos/' ~ barbero.foto) }}"
+                    alt="Foto de {{ barbero.nombre }}"
+                    class="foto mb-3"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
-                        <p class="texto-secundario">
-                            {{ barbero.especialidad or 'Barbero profesional' }}
-                        </p>
-
-                        <p class="texto-secundario">
-                            {{ barbero.descripcion or 'Te esperamos para tu próximo corte.' }}
-                        </p>
-
-                        <a
-                            href="{{ url_for('reservar', barbero_id=barbero.id) }}"
-                            class="btn btn-yakuza w-100 mt-3"
-                        >
-                            RESERVAR HORA
-                        </a>
-
-                    </div>
-
+                <div class="placeholder mb-3"
+                     style="display:none;">
+                    {{ barbero.nombre[0]|upper }}
                 </div>
 
-            {% endfor %}
+                {% else %}
+
+                <div class="placeholder mb-3">
+                    {{ barbero.nombre[0]|upper }}
+                </div>
+
+                {% endif %}
+
+                <h3 class="fw-bold">
+                    {{ barbero.nombre }}
+                </h3>
+
+                <p class="texto-secundario">
+                    {{ barbero.especialidad or 'Barbero profesional' }}
+                </p>
+
+                <p class="texto-secundario">
+                    {{ barbero.descripcion or 'Te esperamos para tu próximo corte.' }}
+                </p>
+
+                <a
+                    href="{{ url_for('reservar', barbero_id=barbero.id) }}"
+                    class="btn btn-yakuza w-100 mt-3"
+                >
+                    RESERVAR HORA
+                </a>
+
+            </div>
 
         </div>
+
+        {% endfor %}
+
+    </div>
 
     {% else %}
 
-        <div class="text-center py-5">
-            <h3>No hay barberos disponibles</h3>
-            <p class="texto-secundario">
-                Pronto tendremos disponibilidad.
-            </p>
-            <a href="/" class="btn btn-outline-light">Volver al inicio</a>
-        </div>
+    <div class="text-center py-5">
+        <h3>No hay barberos registrados</h3>
+
+        <p class="texto-secundario">
+            Estamos preparando nuestro equipo.
+        </p>
+
+        <a href="/" class="btn btn-outline-light">
+            Volver al inicio
+        </a>
+    </div>
 
     {% endif %}
 
@@ -161,3 +183,4 @@
 
 </body>
 </html>
+
