@@ -729,11 +729,13 @@ def login():
         # --------------------------------------------------
 
         if (
-            usuario
-            and usuario.password == contrasena
-            and usuario.activo
-            and usuario.rol == "admin"
-        ):
+            
+    usuario
+    and usuario.verificar_password(contrasena)
+    and usuario.activo
+    and usuario.rol == "admin"
+):
+        
 
             session["admin"] = True
             session["usuario_id"] = usuario.id
